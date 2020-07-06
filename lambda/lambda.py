@@ -2,8 +2,8 @@ import boto3
 
 client = boto3.client('lambda', 
                       region_name='us-east-1',
-                      aws_access_key_id='', 
-                      aws_secret_access_key='')
+                      aws_access_key_id=os.environ['AWS_ACCESS_KEY_ID'],
+                      aws_secret_access_key=os.environ['AWS_SECRET_ACCESS_KEY_ID'])
 
 response = client.create_function(
     FunctionName='schedule-job-ec2',

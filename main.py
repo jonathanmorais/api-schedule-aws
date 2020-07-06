@@ -4,8 +4,8 @@ from datetime import datetime
 import json
 import requests
 import dateutil
-import cloudwatch
-from cloudwatch import rule
+import cloudwatch.cloudwatch
+from cloudwatch.cloudwatch import rule
 
 # Initialize the Flask application
 app = Flask(__name__)
@@ -28,7 +28,7 @@ def parameters():
     
 	cron   = (minute, hour, day, month, year)
 
-	cloudwatch.rule()
+	rule()
 
 	return '''
 		IMAGE: {}
