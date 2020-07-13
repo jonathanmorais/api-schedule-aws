@@ -1,13 +1,15 @@
-FROM python:3.6
+FROM golang:alpine
 
-EXPOSE 5000
+RUN mkdir /src
 
-WORKDIR /
+ADD . /src/
 
-COPY app .
+WORKDIR /src/app
 
-COPY docker/requirements.txt requirements.txt
+RUN go build -o main .
 
-RUN pip install -r requirements.txt
+RUN adduser -S -D -H -h /app appuser
 
-CMD [ "python3", "-u", "main.py" ]
+USER appuser
+
+CMD ["./main"]
