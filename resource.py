@@ -1,0 +1,43 @@
+import process
+import boto3
+import os
+
+def rule():
+    transform = process.transform()
+
+    cloudwatch_events = boto3.client(
+        'events', region_name='us-east-1', aws_access_key_id=os.environ['AWS_ACCESS_KEY_ID'], aws_secret_access_key=os.environ['AWS_SECRET_ACCESS_KEY_ID'])
+
+    response = cloudwatch_events.put_rule(
+        Name='schedule_event',
+        RoleArn='arn:aws:iam::916171215187:role/ScheduleAcess',
+        ScheduleExpression='cron({} {} {} {} {} {})'.format(transform.cron[0],
+                                                            transform.cron[1],
+                                                            transform.cron[2],
+                                                            transform.cron[3],
+                                                            "?",
+                                                            transform.cron[4]),
+        State='ENABLED'
+    )
+    
+    response = cloudwatch_events.put_targets(
+        Rule='schedule_event',
+        Targets=[
+            {
+                'Arn': 'arn:aws:lambda:us-east-1:916171215187:function:schedule-job-ec2',
+                'Id': 'myCloudWatchEventsTarget',
+            }
+        ]
+    )
+
+    client = boto3.client('lambda', region_name='us-east-1', aws_access_key_id=os.environ['AWS_ACCESS_KEY_ID'], aws_secret_access_key=os.environ['AWS_SECRET_ACCESS_KEY_ID'])
+
+    response = client.create_function(
+        FunctionName='schedule-job-ec2',
+        Runtime='python3.6',
+        Role='arn:aws:iam::916171215187:role/ScheduleAcess',
+        Handler='handler.lambda_to_ec2',
+        Code={'ZipFile': open('./schedule-handler.zip', 'rb').read()}
+    )
+    
+    print(response)

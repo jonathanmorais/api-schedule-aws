@@ -4,7 +4,7 @@ EXPOSE 5000
 
 WORKDIR /
 
-COPY app .
+COPY . .
 
 COPY docker/requirements.txt requirements.txt
 
