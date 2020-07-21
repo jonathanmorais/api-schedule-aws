@@ -3,7 +3,8 @@ import boto3
 import os
 
 def rule():
-    transform = process.transform()
+    transform = process.Transform()
+    param = transform.parameters()
 
     cloudwatch_events = boto3.client(
         'events', region_name='us-east-1', aws_access_key_id=os.environ['AWS_ACCESS_KEY_ID'], aws_secret_access_key=os.environ['AWS_SECRET_ACCESS_KEY_ID'])
@@ -11,12 +12,12 @@ def rule():
     response = cloudwatch_events.put_rule(
         Name='schedule_event',
         RoleArn='arn:aws:iam::916171215187:role/ScheduleAcess',
-        ScheduleExpression='cron({} {} {} {} {} {})'.format(transform.cron[0],
-                                                            transform.cron[1],
-                                                            transform.cron[2],
-                                                            transform.cron[3],
+        ScheduleExpression='cron({} {} {} {} {} {})'.format(param[0],
+                                                            param[1],
+                                                            param[2],
+                                                            param[3],
                                                             "?",
-                                                            transform.cron[4]),
+                                                            param[4]),
         State='ENABLED'
     )
     

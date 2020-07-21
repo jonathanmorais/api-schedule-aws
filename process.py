@@ -14,12 +14,11 @@ app = Flask(__name__)
 app.run(host="0.0.0.0", port=5000)
 @app.route('/api/scheduler', methods=['POST'])
 
-class transform(object):
-    def __init__(self, cron):
-        self.cron = cron
+class Transform(object):
+    def __init__(self):
+        self.parameters = self.parameters()
 
     def parameters(self):
-	    transform = transform()
 	    r      = request.get_json()
 	    time   = r['time']
 	    image  = r['docker_image']
@@ -30,11 +29,11 @@ class transform(object):
 	    hour   = str(date).split(":")[0][11:13]
 	    minute = str(date).split(":")[1][0:2]
 
-	    transform.cron = [minute, hour, day, month, year]
+	    cron   = [minute, hour, day, month, year]
 
 	    return '''
 		    self:  {}
 			IMAGE: {}
-			DATE:  {}'''.format(self.cron, image, date)
+			DATE:  {}'''.format(cron, image, date)
 
 rule()
