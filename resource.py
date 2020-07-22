@@ -12,12 +12,12 @@ def rule():
     response = cloudwatch_events.put_rule(
         Name='schedule_event',
         RoleArn='arn:aws:iam::916171215187:role/ScheduleAcess',
-        ScheduleExpression='cron({} {} {} {} {} {})'.format(param[0],
-                                                            param[1],
-                                                            param[2],
-                                                            param[3],
+        ScheduleExpression='cron({} {} {} {} {} {})'.format(param.cron[0],
+                                                            param.cron[1],
+                                                            param.cron[2],
+                                                            param.cron[3],
                                                             "?",
-                                                            param[4]),
+                                                            param.cron[4]),
         State='ENABLED'
     )
     

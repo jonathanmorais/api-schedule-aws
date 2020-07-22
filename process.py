@@ -31,9 +31,6 @@ class Transform(object):
 
 	    cron   = [minute, hour, day, month, year]
 
-	    return '''
-		    self:  {}
-			IMAGE: {}
-			DATE:  {}'''.format(cron, image, date)
+	    return cron
 
 rule()
